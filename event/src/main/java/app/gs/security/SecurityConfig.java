@@ -26,9 +26,9 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // à désactiver si tu utilises Postman
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/register", "/auth/login").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
-            .userDetailsService(userDetailsService)
+           .userDetailsService(userDetailsService)
             .formLogin(Customizer.withDefaults()) // formulaire par défaut
             .httpBasic(Customizer.withDefaults()); // ou Basic Auth via Postman
 

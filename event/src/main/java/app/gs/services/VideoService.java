@@ -1,48 +1,58 @@
 package app.gs.services;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
 import app.gs.entites.Video;
 import app.gs.repositories.VideoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import io.jsonwebtoken.io.IOException;
+import java.util.Map;
 
-import java.util.List;
-import java.util.Optional;
+import com.cloudinary.utils.ObjectUtils;
+
 
 @Service
 public class VideoService {
 
-    @Autowired
-    private VideoRepository videoRepository;
+    private final Cloudinary cloudinary;
+    private final VideoRepository videoRepo;
 
-    // Méthode pour récupérer toutes les vidéos
+    public VideoService(Cloudinary cloudinary, VideoRepository videoRepo) {
+        this.cloudinary = cloudinary;
+        this.videoRepo = videoRepo;
+    }
+
+    public Video uploadVideo(MultipartFile file, String title) {
+        try {
+        	Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
+                    "resource_type", "video"
+                ));
+        	System.out.println("File name: " + file.getOriginalFilename());
+        	System.out.println("Title: " + title);
+        	System.out.println("Is empty: " + file.isEmpty());
+        	 Video video = new Video();
+             video.setTitle(title);
+             video.setUrl((String) uploadResult.get("secure_url"));
+             video.setPublicId((String) uploadResult.get("public_id"));
+             System.out.println("Upload result: " + uploadResult);
+
+             return videoRepo.save(video);
+        } catch(Exception e) {
+        	System.out.println(e.getMessage());
+        	return null;
+        }
+
+       
+    }
+
+
     public List<Video> getAllVideos() {
-        return videoRepository.findAll();
-    }
-
-    // Méthode pour récupérer une vidéo par son ID
-    public Optional<Video> getVideoById(Long id) {
-        return videoRepository.findById(id);
-    }
-
-    // Méthode pour créer une nouvelle vidéo
-    public Video createVideo(Video video) {
-        return videoRepository.save(video);
-    }
-
-    // Méthode pour mettre à jour une vidéo existante
-    public Video updateVideo(Long id, Video videoDetails) {
-        return videoRepository.findById(id)
-            .map(video -> {
-                video.setDescrption(videoDetails.getDescrption());
-                video.setTitre(videoDetails.getTitre());
-                return videoRepository.save(video);
-            })
-            .orElseThrow(() -> new RuntimeException("Video not found with id " + id));
-    }
-
-    // Méthode pour supprimer une vidéo par son ID
-    public void deleteVideo(Long id) {
-        videoRepository.deleteById(id);
+        return videoRepo.findAll();
     }
 }
-
