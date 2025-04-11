@@ -38,14 +38,19 @@ export default function Dashboard() {
                     <p className="section-title mb-3">Main</p>
                     <ul>
                         {links.map((link, index) => (
-                            <li key={index}>
+                            <li
+                                key={index}
+                                className={`${isDashboardActive ? 'text-center' : ''}`} // Add centering class
+                            >
                                 <Link href={link.link}>
                                     <span
                                         className={`${activeLink === index ? 'active text-pink-500 font-bold' : ''}`}
                                         onClick={() => handleLinkClick(index)}
                                     >
                                         <FontAwesomeIcon icon={link.icon} className="mr-2" />
-                                        {link.label}
+                                        {!isDashboardActive && (
+                                            <span>{link.label}</span>
+                                        )}
                                     </span>
                                 </Link>
                             </li>
@@ -56,14 +61,19 @@ export default function Dashboard() {
                     <p className="section-title mb-3">Profile</p>
                     <ul>
                         {profileLinks.map((link, index) => (
-                            <li key={index + links.length}>
+                            <li
+                                key={index + links.length}
+                                className={`${isDashboardActive ? 'text-center' : ''}`} // Add centering class
+                            >
                                 <Link href={link.link}>
                                     <span
                                         className={`${activeLink === index + links.length ? 'active text-pink-500 font-bold' : ''}`}
                                         onClick={() => handleLinkClick(index + links.length)}
                                     >
                                         <FontAwesomeIcon icon={link.icon} className="mr-2" />
-                                        {link.label}
+                                        {!isDashboardActive && (
+                                            <span>{link.label}</span>
+                                        )}
                                     </span>
                                 </Link>
                             </li>
@@ -74,14 +84,19 @@ export default function Dashboard() {
                     <p className="section-title mb-3">Teacher</p>
                     <ul>
                         {teacherLinks.map((link, index) => (
-                            <li key={index + links.length + profileLinks.length}>
+                            <li
+                                key={index + links.length + profileLinks.length}
+                                className={`${isDashboardActive ? 'text-center' : ''}`} // Add centering class
+                            >
                                 <Link href={link.link}>
                                     <span
                                         className={`${activeLink === index + links.length + profileLinks.length ? 'active text-pink-500 font-bold' : ''}`}
                                         onClick={() => handleLinkClick(index + links.length + profileLinks.length)}
                                     >
                                         <FontAwesomeIcon icon={link.icon} className="mr-2" />
-                                        {link.label}
+                                        {!isDashboardActive && (
+                                            <span>{link.label}</span>
+                                        )}
                                     </span>
                                 </Link>
                             </li>

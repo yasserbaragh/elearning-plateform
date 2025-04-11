@@ -9,7 +9,7 @@ const escapeRooms = [
     { id: 2, name: 'Escape Room 2', field: 'History' },
     { id: 3, name: 'Escape Room 3', field: 'Math' },
     { id: 4, name: 'Escape Room 4', field: 'Art' },
-];
+]
 
 export default function Main() {
     const router = useRouter();
@@ -20,7 +20,7 @@ export default function Main() {
                 <Card 
                     key={room.id} 
                     title={room.name} 
-                    className="escape-room-card" 
+                    className="escape-room-card cursor-pointer" 
                     onClick={() => router.push(`/main/game/${room.id}`)} 
                 >
                     <p>Field: {room.field}</p>
