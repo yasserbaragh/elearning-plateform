@@ -28,6 +28,7 @@ export default function Dashboard() {
         { label: 'Teacher', icon: faChalkboardTeacher, link: '/main/teacher' }
     ]
 
+    //dd
     return (
         <div className={`dashboard ${isDashboardActive ? 'active' : ''}`}>
             <span onClick={() => setIsDashboardActive(prev => !prev)} className="cursor-pointer hamburger">
@@ -80,7 +81,7 @@ export default function Dashboard() {
                         ))}
                     </ul>
                 </div>
-                <div>
+                <div> 
                     <p className="section-title mb-3">Teacher</p>
                     <ul>
                         {teacherLinks.map((link, index) => (
