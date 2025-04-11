@@ -20,7 +20,7 @@ export default function Dashboard() {
     ]
 
     const profileLinks = [
-        { label: 'Achievements', icon: faTrophy, link: '/main/achievements' },
+        { label: 'Achievements', icon: faTrophy, link: '/main/achievement' },
         { label: 'Account', icon: faUser, link: '/main/account' }
     ]
 
