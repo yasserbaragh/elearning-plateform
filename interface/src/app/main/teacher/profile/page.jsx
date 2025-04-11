@@ -1,10 +1,10 @@
-import Achievements from '@/app/components/profile/Achievements'
+import ProfileTeach from '@/app/components/teacher/ProfileTeach'
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-      <Achievements />
+        <ProfileTeach />
     </div>
   )
 }

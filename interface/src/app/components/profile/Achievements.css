@@ -1,0 +1,36 @@
+.achievements-container {
+  max-width: 400px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #1e293b, #334155);
+  border: 3px solid #4ade80;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  color: #e2e8f0;
+  font-family: 'Press Start 2P', cursive; /* Game-like font */
+}
+
+.achievement-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #1e293b;
+  border: 2px solid #4ade80;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.achievement-item:last-child {
+  margin-bottom: 0;
+}
+
+.achievement-item p {
+  margin: 0;
+}
+
+.achievement-item span {
+  font-weight: bold;
+  color: #4ade80;
+}

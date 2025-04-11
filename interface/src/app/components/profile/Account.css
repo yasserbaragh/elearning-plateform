@@ -1,0 +1,15 @@
+.account-container {
+  background-image: url('/assets/background.jpg'); /* Replace with your image path */
+  background-size: cover;
+  background-position: center;
+}
+
+.profile-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.experience-progress {
+  height: 10px;
+  border-radius: 5px;
+}

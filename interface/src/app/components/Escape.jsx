@@ -13,7 +13,7 @@ const FRAME_WIDTH = 16
 const FRAME_HEIGHT = 16
 const FRAME_COUNT = 4
 
-export default function Escape() {
+export default function Escape({ game }) {
     const canvasRef = useRef(null)
     const [inventory, setInventory] = useState([])
     const playerRef = useRef({ x: 50, y: 50, speed: 2, direction: 0, frame: 0 })

@@ -6,7 +6,7 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import './Teacher.css'; // External CSS file for additional styling
 
-export default function Teacher() {
+export default function Teacher({ videos }) {
   const [isFollowing, setIsFollowing] = useState(false);
   const videos = [
     { id: 1, title: 'Video 1', isLive: false },

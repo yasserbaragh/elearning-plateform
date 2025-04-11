@@ -1,10 +1,12 @@
 import React from 'react'
 import Main from '../components/main/Main'
+import api from "@/config"
 
-export default function page() {
+export default async function page() {
+  const quizzes = await fetch(`${api}/api/quizz`)
   return (
     <div>
-      <Main />
+      <Main quizzes={quizzes}/>
     </div>
   )
 }

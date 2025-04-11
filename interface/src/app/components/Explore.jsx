@@ -9,7 +9,7 @@ const videos = [
   { id: 4, title: 'Video 4', description: 'Description for Video 4' },
 ]
 
-export default function Explore() {
+export default function Explore( {videos} ) {
   return (
     <div className="escape-room-grid">
       {videos.map((video) => (

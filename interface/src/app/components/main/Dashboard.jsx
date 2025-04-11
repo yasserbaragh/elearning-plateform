@@ -25,7 +25,7 @@ export default function Dashboard() {
     ]
 
     const teacherLinks = [
-        { label: 'Teacher', icon: faChalkboardTeacher, link: '/main/teacher' }
+        { label: 'Teacher', icon: faChalkboardTeacher, link: '/main/teacher/profile' }
     ]
 
     //dd
