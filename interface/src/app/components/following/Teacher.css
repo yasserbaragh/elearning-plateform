@@ -1,0 +1,22 @@
+.teacher-page {
+  font-family: Arial, sans-serif;
+}
+
+.channel-header {
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.video-list .video-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-list .video-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.video-thumbnail {
+  background-image: url('/path/to/placeholder-image.jpg');
+  background-size: cover;
+  background-position: center;
+}

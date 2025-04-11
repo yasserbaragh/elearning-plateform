@@ -1,10 +1,10 @@
-import Following from '@/app/components/following/Following'
+import Teacher from '@/app/components/following/Teacher'
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-      <Following />
+        <Teacher />
     </div>
   )
 }
