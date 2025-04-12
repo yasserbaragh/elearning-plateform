@@ -1,3 +1,4 @@
+"use client"
 import { api, authApi } from '@/config'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -16,6 +17,7 @@ export default function Login() {
         },
         body: JSON.stringify({ username: email, motDePasse: password }),
         credentials: 'include', // Important to receive HTTP-only cookies
+        body: JSON.stringify({ email, motDePasse: password }),
       });
 
       if (!response.ok) {
@@ -23,12 +25,28 @@ export default function Login() {
       }
 
       const data = await response.json();
+
       document.cookie = `token=${data.token}; path=/;`;
       document.cookie = `userId=${data.idUser}; path=/;`;
       router.push('/main');
       // You can redirect or update UI state here
     } catch (err) {
       console.error('Login error:', err.message);
+      const { token, user } = data;
+
+      // Store token in cookies
+      document.cookie = `token=${token}; path=/; HttpOnly`;
+
+      // Remove password from user object
+      const { password, ...userWithoutPassword } = user;
+
+      // Store user in cookies
+      document.cookie = `user=${encodeURIComponent(JSON.stringify(userWithoutPassword))}; path=/; HttpOnly`;
+
+      console.log('User logged in:', userWithoutPassword);
+
+    } catch (error) {
+      console.error('Error during login:', error);
     }
   };
   return (
