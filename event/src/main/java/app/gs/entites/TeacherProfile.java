@@ -13,36 +13,54 @@ public class TeacherProfile {
 	
 	private String rating ;
 	private String budget ;
+	private Double Rip;
+	public TeacherProfile(String rating, String budget, Double rip, Long idUser) {
+		super();
+		this.rating = rating;
+		this.budget = budget;
+		Rip = rip;
+		this.idUser = idUser;
+	}
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUser;
-	public TeacherProfile(String rating, String budget, Long idUser) {
-		super();
-		this.rating = rating;
-		this.budget = budget;
-		this.idUser = idUser;
-	}
+	
 	public TeacherProfile() {
 		super();
 	}
+
 	public String getRating() {
 		return rating;
 	}
+
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
+
 	public String getBudget() {
 		return budget;
 	}
+
 	public void setBudget(String budget) {
 		this.budget = budget;
 	}
+
+	public Double getRip() {
+		return Rip;
+	}
+
+	public void setRip(Double rip) {
+		Rip = rip;
+	}
+
 	public Long getIdUser() {
 		return idUser;
 	}
+
 	public void setIdUser(Long idUser) {
 		this.idUser = idUser;
 	}
+	
     
 
 }
