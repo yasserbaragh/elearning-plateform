@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface UtilisateurRepository extends JpaRepository<utilisateur, Long> {
 
-    Optional<utilisateur> findByUsername(String username); // ✅ à ajouter
+    Optional<utilisateur> findByUsername(String username);
     boolean existsByUsername(String username);              // déjà utilisé dans ton service d’inscription
-}
+    
+	}
+
