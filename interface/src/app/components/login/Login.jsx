@@ -30,21 +30,6 @@ export default function Login() {
       document.cookie = `userId=${data.idUser}; path=/;`;
       router.push('/main');
       // You can redirect or update UI state here
-    } catch (err) {
-      console.error('Login error:', err.message);
-      const { token, user } = data;
-
-      // Store token in cookies
-      document.cookie = `token=${token}; path=/; HttpOnly`;
-
-      // Remove password from user object
-      const { password, ...userWithoutPassword } = user;
-
-      // Store user in cookies
-      document.cookie = `user=${encodeURIComponent(JSON.stringify(userWithoutPassword))}; path=/; HttpOnly`;
-
-      console.log('User logged in:', userWithoutPassword);
-
     } catch (error) {
       console.error('Error during login:', error);
     }
