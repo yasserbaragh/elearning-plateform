@@ -1,9 +1,9 @@
 import Explore from '@/app/components/Explore'
 import React from 'react'
-import api from "@/config"
+import api, { fetchNoCache } from "@/config"
 
 export default async function page() {
-  const videos = await fetch(`${api}/api/videos`)
+  const videos = await fetchNoCache(`/videos`)
   return (
     <div>
       <Explore videos={videos}/>

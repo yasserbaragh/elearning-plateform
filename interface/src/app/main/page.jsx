@@ -1,9 +1,10 @@
 import React from 'react'
 import Main from '../components/main/Main'
-import api from "@/config"
+import { api, fetchNoCache } from '@/config'
 
 export default async function page() {
-  const quizzes = await fetch(`${api}/api/quizz`)
+  console.log("s", api)
+  const quizzes = await fetchNoCache(`/quizz`)
   return (
     <div>
       <Main quizzes={quizzes}/>

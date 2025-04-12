@@ -1,46 +1,49 @@
 package app.gs.controlleurs;
 
-import app.gs.entites.Quizz;
-import app.gs.services.QuizzService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import app.gs.entites.Quizz;
+import app.gs.services.QuizService;
+
 @RestController
-@RequestMapping("/api/quizz")
+@RequestMapping("/api/quizzes")
 public class QuizzController {
 
-    @Autowired
-    private QuizzService quizzService;
+    private final QuizService quizzService;
+
+    public QuizzController(QuizService quizzService) {
+        this.quizzService = quizzService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Quizz> addQuizz(@RequestBody Quizz quizz) {
+        Quizz saved = quizzService.saveQuiz(quizz);
+        return ResponseEntity.ok(saved);
+    }
 
     @GetMapping
-    public List<Quizz> getAllQuizzes() {
-        return quizzService.getAllQuizzes();
+    public ResponseEntity<List<Quizz>> getAllQuizzes() {
+        return ResponseEntity.ok(quizzService.getAllQuizzes());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Quizz> getQuizzById(@PathVariable Long id) {
-        Optional<Quizz> quizz = quizzService.getQuizzById(id);
-        return quizz.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public ResponseEntity<Quizz> createQuizz(@RequestBody Quizz quizz) {
-        Quizz createdQuizz = quizzService.createQuizz(quizz);
-        return ResponseEntity.ok(createdQuizz);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Quizz> updateQuizz(@PathVariable Long id, @RequestBody Quizz quizz) {
-        Quizz updatedQuizz = quizzService.updateQuizz(id, quizz);
-        return updatedQuizz != null ? ResponseEntity.ok(updatedQuizz) : ResponseEntity.notFound().build();
+        Optional<Quizz> quiz = quizzService.getQuizzById(id);
+        return quiz.map(ResponseEntity::ok)
+                   .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteQuizz(@PathVariable Long id) {
-        return quizzService.deleteQuizz(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        boolean deleted = quizzService.deleteQuizz(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

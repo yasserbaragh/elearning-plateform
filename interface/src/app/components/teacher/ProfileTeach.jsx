@@ -8,8 +8,8 @@ import { Column } from 'primereact/column';
 import './ProfileTeach.css'; // External CSS for additional styling
 import { api } from '@/config';
 
-export default function ProfileTeach() {
-  const [videos, setVideos] = useState([]);
+export default function ProfileTeach({ gotVideos }) {
+  const [videos, setVideos] = useState(gotVideos || []);
   const [quizzes, setQuizzes] = useState([]);
   const [newVideoTitle, setNewVideoTitle] = useState('');
   const [newVideoDescription, setNewVideoDescription] = useState('');
@@ -17,20 +17,32 @@ export default function ProfileTeach() {
   const [questions, setQuestions] = useState([]);
   const [showVideoDialog, setShowVideoDialog] = useState(false);
   const [showQuizDialog, setShowQuizDialog] = useState(false);
+  const [videoFile, setVideoFile] = useState(null);
+
 
   const addVideo = async () => {
-    const videoData = { title: newVideoTitle, description: newVideoDescription };
+    if (!videoFile) {
+      console.error("No video file selected");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', newVideoTitle);
+    formData.append('description', newVideoDescription);
+    formData.append('file', videoFile); // Key name should match your backend expectation
+
     try {
-      const response = await fetch(`${api}/api/videos`, {
+      const response = await fetch(`${api}/videos`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(videoData),
+        body: formData,
       });
+
       if (response.ok) {
         const savedVideo = await response.json();
         setVideos([...videos, savedVideo]);
         setNewVideoTitle('');
         setNewVideoDescription('');
+        setVideoFile(null);
         setShowVideoDialog(false);
       } else {
         console.error('Failed to add video');
@@ -40,10 +52,11 @@ export default function ProfileTeach() {
     }
   };
 
+
   const deleteVideo = async (index) => {
     const videoToDelete = videos[index];
     try {
-      const response = await fetch(`${api}/api/videos/${videoToDelete.id}`, {
+      const response = await fetch(`${api}/videos/${videoToDelete.id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -125,15 +138,24 @@ export default function ProfileTeach() {
         <div className="mb-5">
           <h2 className="text-2xl font-semibold text-gray-800">Videos</h2>
           <Button label="Add Video" icon="pi pi-plus" className="p-button-success mb-3" onClick={() => setShowVideoDialog(true)} />
-          <DataTable value={videos} className="mb-3 shadow-md rounded-lg">
-            <Column field="title" header="Title" className="text-gray-700"></Column>
-            <Column
-              body={(rowData, { rowIndex }) => (
-                <Button icon="pi pi-trash" className="p-button-danger" onClick={() => deleteVideo(rowIndex)} />
-              )}
-              header="Actions"
-            ></Column>
-          </DataTable>
+          {videos && videos.map((video, index) => (
+            <div key={index} className="bg-white rounded-lg shadow-md p-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">{video.title}</h3>
+              <video controls className="w-full rounded">
+                <source
+                  src={`https://res.cloudinary.com/your-cloud-name/video/upload/${video.publicId}.mp4`}
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+              <button
+                onClick={() => deleteVideo(index)}
+                className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          ))}
         </div>
 
         {/* Quizzes Section */}
@@ -162,9 +184,16 @@ export default function ProfileTeach() {
         <div className="p-fluid">
           <InputText value={newVideoTitle} onChange={(e) => setNewVideoTitle(e.target.value)} placeholder="Video Title" />
           <InputText value={newVideoDescription} onChange={(e) => setNewVideoDescription(e.target.value)} placeholder="Video Description" className="mt-2" />
-          <Button label="Add" icon="pi pi-check" className="mt-3" onClick={addVideo} />
+          <input
+            type="file"
+            accept="video/mp4"
+            onChange={(e) => setVideoFile(e.target.files[0])}
+            className="mt-2"
+          />
+          <Button label="Add" icon="pi pi-check" className="mt-3" onClick={addVideo} disabled={!videoFile} />
         </div>
       </Dialog>
+
 
       {/* Add Quiz Dialog */}
       <Dialog header="Add Quiz" visible={showQuizDialog} onHide={() => setShowQuizDialog(false)}>

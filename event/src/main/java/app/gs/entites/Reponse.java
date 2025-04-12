@@ -20,18 +20,17 @@ public class Reponse {
 
     private boolean correct;
 
-    @ManyToOne
-    @JoinColumn(name = "id_question")
-    private Question question;
+
+    private Long id_question;
 
     public Reponse() {
         super();
     }
 
-    public Reponse(Long id, Question question, String response, boolean correct) {
+    public Reponse(Long id, Long id_question, String response, boolean correct) {
         super();
         this.id = id;
-        this.question = question;
+        this.id_question = id_question;
         this.response = response;
         this.correct = correct;
     }
@@ -44,12 +43,12 @@ public class Reponse {
         this.id = id;
     }
 
-    public Question getQuestion() {
-        return question;
+    public Long getIdQuestion() {
+        return id_question;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setIdQuestion(Long id_question) {
+        this.id_question = id_question;
     }
 
     public String getResponse() {
@@ -67,5 +66,10 @@ public class Reponse {
     public void setCorrect(boolean correct) {
         this.correct = correct;
     }
+
+	public void setText(String text) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

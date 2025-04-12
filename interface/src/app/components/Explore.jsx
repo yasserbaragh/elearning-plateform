@@ -9,12 +9,16 @@ const videos = [
   { id: 4, title: 'Video 4', description: 'Description for Video 4' },
 ]
 
-export default function Explore( {videos} ) {
+export default function Explore({ videos }) {
   return (
     <div className="escape-room-grid">
-      {videos.map((video) => (
+      {videos && videos.map((video) => (
         <Card key={video.id} title={video.title} className="escape-room-card cursor-pointer">
           <p>{video.description}</p>
+          <video controls width="640" height="360">
+            <source src={video.url} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </Card>
       ))}
     </div>

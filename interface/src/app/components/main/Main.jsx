@@ -11,7 +11,7 @@ const escapeRooms = [
     { id: 4, name: 'Escape Room 4', field: 'Art' },
 ]
 
-export default function Main({ quizzes}) {
+export default function Main({ quizzes }) {
     const router = useRouter();
     
     return (

@@ -55,4 +55,43 @@ public class VideoService {
     public List<Video> getAllVideos() {
         return videoRepo.findAll();
     }
+
+   
+    private String extractPublicIdFromUrl(String url) {
+        // Cloudinary video URLs are typically like:
+        // https://res.cloudinary.com/<cloud_name>/video/upload/v<version>/<public_id>.mp4
+
+        // Remove the prefix up to /upload/:
+        String[] parts = url.split("/upload/");
+        if (parts.length < 2) return null;
+
+        // Remove extension (e.g. .mp4) from the filename:
+        String pathWithoutExt = parts[1].replaceAll("\\.mp4$", "");
+        return pathWithoutExt;
+    }
+    
+
+public boolean deleteVideo(Long id) {
+    return videoRepo.findById(id).map(video -> {
+        try {
+            // Assuming your Video entity has a getUrl() or similar
+            String videoUrl = video.getUrl(); // e.g. https://res.cloudinary.com/.../video/upload/v1234567890/your_video.mp4
+
+            // Extract public ID from URL (you might store it directly instead for easier access)
+            String publicId = extractPublicIdFromUrl(videoUrl);
+
+            // Delete from Cloudinary
+            cloudinary.uploader().destroy(publicId, ObjectUtils.asMap("resource_type", "video"));
+
+            // Delete from DB
+            videoRepo.deleteById(id);
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }).orElse(false);
+}
+
 }

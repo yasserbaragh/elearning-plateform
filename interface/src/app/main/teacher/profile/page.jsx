@@ -1,10 +1,12 @@
 import ProfileTeach from '@/app/components/teacher/ProfileTeach'
+import { fetchNoCache } from '@/config'
 import React from 'react'
 
-export default function page() {
+export default async function page() {
+  const videos = await fetchNoCache("/videos")
   return (
     <div>
-        <ProfileTeach />
+        <ProfileTeach gotVideos={videos} />
     </div>
   )
 }
