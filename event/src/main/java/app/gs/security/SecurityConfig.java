@@ -1,8 +1,5 @@
 package app.gs.security;
 
-import org.springframework.security.config.Customizer;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -20,17 +18,19 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private JwtAuthenticationFilter jwtFilter; // Assure-toi que tu as bien un filtre JWT
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // à désactiver si tu utilises Postman
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/register", "/auth/login").permitAll()
-                .anyRequest().permitAll()
+                .requestMatchers("/auth/register", "/auth/login").permitAll() // autoriser les routes de login et register
+                .anyRequest().authenticated() // toutes les autres routes doivent être authentifiées
             )
-           .userDetailsService(userDetailsService)
-            .formLogin(Customizer.withDefaults()) // formulaire par défaut
-            .httpBasic(Customizer.withDefaults()); // ou Basic Auth via Postman
+            .userDetailsService(userDetailsService)
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Ajouter le filtre JWT avant l'authentification standard
 
         return http.build();
     }

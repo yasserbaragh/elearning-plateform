@@ -2,21 +2,14 @@ package app.gs.controlleurs;
 
 import app.gs.entites.utilisateur;
 import app.gs.repositories.UtilisateurRepository;
+import app.gs.security.JwtUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,78 +17,50 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-
-
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
     
-    // ======= LOGIN =======
-    /*@PostMapping("/login")
-    public String login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
-    	try {
-    		System.out.println("Login request received"); 
-    		 Authentication authentication = authenticationManager.authenticate(
-    	                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-    	        );
+    @Autowired
+    private JwtUtil jwtUtil;
 
-    	        // Set the authentication context for further requests
-    	        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-    	        // Get the authenticated user details
-    	        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-    	        String username = userDetails.getUsername();
-
-    	        // Get the session ID
-    	        String sessionId = httpRequest.getSession(true).getId();
-
-    	        // Respond with the session ID and username
-    	        return "dd" + username + " " + sessionId;
-            
-        }  catch (Exception e) {
-        	e.printStackTrace();
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "An unexpected error occurred: " + e.getMessage());
-            return "error: " + e.getMessage();
-        }
-    }
- */
-    // ======= REGISTER =======
     @PostMapping("/register")
     public String registerUser(@RequestBody utilisateur user) {
         if (utilisateurRepository.existsByUsername(user.getUsername())) {
             return "Nom d'utilisateur déjà pris";
         }
-
         user.setMotDePasse(passwordEncoder.encode(user.getMotDePasse()));
         utilisateurRepository.save(user);
         return "Utilisateur enregistré avec succès. Vous pouvez maintenant vous connecter.";
     }
+    
+    
+    @PostMapping("/login")
+    public ResponseEntity<utilisateur> login(@RequestBody utilisateur user) {
+        Optional<utilisateur> userOpt = utilisateurRepository.findByUsername(user.getUsername());
 
-    // ======= DTOs =======
-    static class LoginRequest {
-        private String username;
-        private String password;
-
-        public String getUsername() { return username; }
-        public void setUsername(String username) { this.username = username; }
-
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-    }
-
-    static class LoginResponse {
-        private String username;
-        private String sessionId;
-
-        public LoginResponse(String username, String sessionId) {
-            this.username = username;
-            this.sessionId = sessionId;
+        if (userOpt.isPresent()) {
+            utilisateur foundUser = userOpt.get();
+            if (passwordEncoder.matches(user.getMotDePasse(), foundUser.getMotDePasse())) {
+                //foundUser.setMotDePasse(null);
+                foundUser.setToken(jwtUtil.createToken(foundUser.getUsername()));
+                return ResponseEntity.ok(foundUser);
+            }
         }
 
-        public String getUsername() { return username; }
-        public String getSessionId() { return sessionId; }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    
+
+
+	public AuthController(UtilisateurRepository utilisateurRepository, PasswordEncoder passwordEncoder,
+			JwtUtil jwtUtil) {
+		super();
+		this.utilisateurRepository = utilisateurRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.jwtUtil = jwtUtil;
+	}
 }

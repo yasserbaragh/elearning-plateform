@@ -2,30 +2,23 @@ package app.gs.services;
 
 import app.gs.entites.utilisateur;
 import app.gs.repositories.UtilisateurRepository;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-    private final UtilisateurRepository userRepository;
+    private final UtilisateurRepository utilisateurRepository;
 
-    public MyUserDetailsService(UtilisateurRepository userRepository) {
-        this.userRepository = userRepository;
+    public MyUserDetailsService(UtilisateurRepository utilisateurRepository) {
+        this.utilisateurRepository = utilisateurRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        utilisateur user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé : " + username));
-
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getMotDePasse())
-                .roles("USER")
-                .build();
+    public utilisateur loadUserByUsername(String username) throws UsernameNotFoundException {
+        return utilisateurRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
     }
-
-
 }
-
