@@ -4,7 +4,7 @@ import { api, fetchNoCache } from '@/config'
 
 export default async function page() {
   console.log("s", api)
-  const quizzes = await fetchNoCache(`/quizz`)
+  const quizzes = await fetchNoCache(`/quizzes`)
   return (
     <div>
       <Main quizzes={quizzes}/>

@@ -26,7 +26,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // à désactiver si tu utilises Postman
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/register", "/auth/login").permitAll() // autoriser les routes de login et register
+                .requestMatchers("/auth/register", "/auth/login","/api/videos","/api/videos/{id}","/api/follower","/api/follower/{id}","/api/utilisateurs","/api/utilisateurs/{id}","/api/responses","/api/responses/{id}","/api/rates","/api/rates/{id}","/api/quizzes","/api/quizzes/{id}","/api/questions/{id}","/api/profiles/{id}","/api/follower/{id}", "/api/questions").permitAll() // autoriser les routes de login et register
                 .anyRequest().authenticated() // toutes les autres routes doivent être authentifiées
             )
             .userDetailsService(userDetailsService)

@@ -15,7 +15,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long idTeacher;
+    private Long idQuizz;
 
     private String question;
 
@@ -23,10 +23,10 @@ public class Question {
         super();
     }
 
-    public Question(Long id, Long idTeacher, String question) {
+    public Question(Long id, Long idQuizz, String question) {
         super();
         this.id = id;
-        this.idTeacher = idTeacher;
+        this.idQuizz = idQuizz;
         this.question = question;
     }
 
@@ -38,12 +38,12 @@ public class Question {
         this.id = id;
     }
 
-    public Long getIdTeacher() {
-        return idTeacher;
+    public Long getIdQuizz() {
+        return idQuizz;
     }
 
-    public void setIdTeacher(Long idTeacher) {
-        this.idTeacher = idTeacher;
+    public void setIdQuizz(Long id_quizz) {
+        this.idQuizz = id_quizz;
     }
 
     public String getQuestion() {

@@ -2,6 +2,9 @@ import React from 'react';
 import { Card } from 'primereact/card';
 import { ProgressBar } from 'primereact/progressbar';
 import './Account.css'; // External CSS for additional custom styles.
+import profilee from "./profile.png"
+import Image from 'next/image';
+
 
 export default function Account() {
   const user = {
@@ -16,8 +19,11 @@ export default function Account() {
   return (
     <div className="account-container bg-gray-100 p-6 flex justify-center items-center min-h-screen">
       <Card className="profile-card w-full max-w-md shadow-lg">
-        <h1 className="account-title text-2xl font-bold text-center mb-4">Profile</h1>
-        <h2 className="username text-xl font-semibold text-center">{user.username}</h2>
+        <h1 className="account-title text-2xl font-bold text-center mb-4 hh">Profile</h1>
+                        <Image src={profilee} alt="" className="profil" />
+        
+
+        <h2 className="username text-xl font-semibold text-center hh">{user.username}</h2>
         <p className="level text-center text-gray-600">Level: {user.level}</p>
         <div className="experience-bar mt-4">
           <ProgressBar value={progress} className="experience-progress" />

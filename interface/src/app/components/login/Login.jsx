@@ -1,20 +1,43 @@
+import { api, authApi } from '@/config'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const router = useRouter()
 
-  const handleLogin = () => {
-    console.log('Logging in with:', { email, password })
+  const handleLogin = async () => {
+    try {
+      const response = await fetch(`${authApi}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: email, motDePasse: password }),
+        credentials: 'include', // Important to receive HTTP-only cookies
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      document.cookie = `token=${data.token}; path=/;`;
+      document.cookie = `userId=${data.idUser}; path=/;`;
+      router.push('/main');
+      // You can redirect or update UI state here
+    } catch (err) {
+      console.error('Login error:', err.message);
+    }
   };
-
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100">
       <h1 className="text-2xl font-bold mb-6">Login</h1>
       <div className="w-80 space-y-4">
         <input
-          type="email"
-          placeholder="Email"
+          type="text"
+          placeholder="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 border rounded"

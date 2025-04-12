@@ -1,8 +1,10 @@
+
 package app.gs.controlleurs;
 
 import app.gs.entites.utilisateur;
 import app.gs.repositories.UtilisateurRepository;
 import app.gs.security.JwtUtil;
+import jakarta.servlet.http.Cookie;
 
 import java.util.Optional;
 
@@ -46,6 +48,9 @@ public class AuthController {
             if (passwordEncoder.matches(user.getMotDePasse(), foundUser.getMotDePasse())) {
                 //foundUser.setMotDePasse(null);
                 foundUser.setToken(jwtUtil.createToken(foundUser.getUsername()));
+                
+                
+                
                 return ResponseEntity.ok(foundUser);
             }
         }

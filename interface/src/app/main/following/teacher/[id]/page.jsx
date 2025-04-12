@@ -6,7 +6,7 @@ export default async function page({ params }) {
     const videos = await fetch(`${api}/api/teacher/${params.id}/videos`)
     return (
         <div>
-            <Teacher videos={videos}/>
+            <Teacher videoss={videos}/>
         </div>
     )
 }

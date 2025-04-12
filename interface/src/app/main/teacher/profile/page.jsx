@@ -4,9 +4,10 @@ import React from 'react'
 
 export default async function page() {
   const videos = await fetchNoCache("/videos")
+  const quizzes = await fetchNoCache('/quizzes')
   return (
     <div>
-        <ProfileTeach gotVideos={videos} />
+        <ProfileTeach gotVideos={videos} gotQuizzes={quizzes}/>
     </div>
   )
 }

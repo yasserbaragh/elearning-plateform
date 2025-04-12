@@ -94,10 +94,10 @@ export default function Escape({ game }) {
             const door = doorRef.current
             if (!door.unlocked && isNear(player, door) && inventory.includes("key") && keys.KeyE) {
                 door.unlocked = true
-                const answer = prompt("The keypad flashes: 'What has keys but can't open locks?' What's your answer?")
-                if (answer && answer.toLowerCase() === "piano") {
+                const answer = prompt("What is the numerical value of gravity (m/s*s)")
+                if (answer && answer.toLowerCase() === "10") {
                     door.unlocked = true
-                    alert("Correct! You unlocked the door and escaped! 🎉")
+                    alert("Correct! You unlocked the door and escaped! REWARD : 200 COINS 💰 🎉")
                 } else {
                     alert("Wrong answer! Try again.")
                 }

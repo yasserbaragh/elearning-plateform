@@ -1,3 +1,4 @@
+import { api, authApi } from '@/config'
 import React, { useState } from 'react'
 
 export default function Register() {
@@ -6,21 +7,51 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
+  const [username, setUsername] = useState('')
 
-  const handleRegister = () => {
-    console.log('Registering with:', {
-      firstName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-    })
-  }
+  const handleRegister = async () => {
+    const userPayload = {
+      nom: lastName,
+      prenom: firstName,
+      motDePasse: password,
+      username: username,
+      email: email,
+      numTel: phoneNumber,
+    };
 
+    try {
+      const response = await fetch(`${authApi}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userPayload),
+      });
+
+      if (!response.ok) {
+        const error = await response.text()
+        console.log(error)
+        throw new Error('Registration failed');
+      }
+
+      const data = await response.json();
+      console.log('User registered:', data);
+      // Optionally redirect or show success
+    } catch (error) {
+      console.error('Error during registration:', error);
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100">
       <h1 className="text-2xl font-bold mb-6">Register</h1>
       <div className="w-80 space-y-4">
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full p-2 border rounded"
+        />
         <input
           type="text"
           placeholder="First Name"

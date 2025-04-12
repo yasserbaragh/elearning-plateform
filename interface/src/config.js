@@ -1,4 +1,5 @@
 export const api = 'http://localhost:8080/api'
+export const authApi = 'http://localhost:8080'
 
 export async function fetchNoCache(url) {
     const res = await fetch(`${api}${url}`, {

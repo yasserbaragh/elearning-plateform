@@ -8,9 +8,9 @@ import { Column } from 'primereact/column';
 import './ProfileTeach.css'; // External CSS for additional styling
 import { api } from '@/config';
 
-export default function ProfileTeach({ gotVideos }) {
+export default function ProfileTeach({ gotVideos, gotQuizzes }) {
   const [videos, setVideos] = useState(gotVideos || []);
-  const [quizzes, setQuizzes] = useState([]);
+  const [quizzes, setQuizzes] = useState(gotQuizzes || []);
   const [newVideoTitle, setNewVideoTitle] = useState('');
   const [newVideoDescription, setNewVideoDescription] = useState('');
   const [newQuizTitle, setNewQuizTitle] = useState('');
@@ -86,31 +86,72 @@ export default function ProfileTeach({ gotVideos }) {
   };
 
   const addQuiz = async () => {
-    const quizData = { title: newQuizTitle, questions };
     try {
-      const response = await fetch(`${api}/api/quizzes`, {
+      // 1. Create the quiz and get the quiz ID
+      const quizResponse = await fetch(`${api}/quizzes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(quizData),
+        body: JSON.stringify({ title: newQuizTitle }),
       });
-      if (response.ok) {
-        const savedQuiz = await response.json();
-        setQuizzes([...quizzes, savedQuiz]);
-        setNewQuizTitle('');
-        setQuestions([]);
-        setShowQuizDialog(false);
-      } else {
-        console.error('Failed to add quiz');
+
+      if (!quizResponse.ok) {
+        console.error('Failed to create quiz');
+        return;
       }
+
+      const savedQuiz = await quizResponse.json();
+      const quizId = savedQuiz.id;
+
+      // 2. Add each question to the quiz
+      for (const question of questions) {
+        const questionResponse = await fetch(`${api}/questions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: question.text, idQuizz: quizId }),
+        });
+
+        if (!questionResponse.ok) {
+          console.error('Failed to add question:', question.text);
+          continue;
+        }
+
+        const savedQuestion = await questionResponse.json();
+        const questionId = savedQuestion.id;
+
+        // 3. Add each response to the question
+        for (const response of question.responses) {
+          const responseRes = await fetch(`${api}/responses`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              response: response.text,
+              correct: response.isCorrect,
+              idQuestion: questionId
+            }),
+          });
+
+          if (!responseRes.ok) {
+            console.error('Failed to add response:', response.text);
+          }
+        }
+      }
+
+      // 4. Update UI
+      setQuizzes([...quizzes, savedQuiz]);
+      setNewQuizTitle('');
+      setQuestions([]);
+      setShowQuizDialog(false);
+
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error while adding quiz:', error);
     }
   };
+
 
   const deleteQuiz = async (index) => {
     const quizToDelete = quizzes[index];
     try {
-      const response = await fetch(`${api}/api/quizzes/${quizToDelete.id}`, {
+      const response = await fetch(`${api}/quizzes/${quizToDelete.id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -165,11 +206,16 @@ export default function ProfileTeach({ gotVideos }) {
           <DataTable value={quizzes} className="mb-3 shadow-md rounded-lg">
             <Column field="title" header="Title" className="text-gray-700"></Column>
             <Column
-              body={(rowData, { rowIndex }) => (
-                <Button icon="pi pi-trash" className="p-button-danger" onClick={() => deleteQuiz(rowIndex)} />
-              )}
               header="Actions"
-            ></Column>
+              body={(rowData, { rowIndex }) => (
+                <Button
+                  label='Delete'
+                  icon="pi pi-trash"
+                  className="p-button-danger edit"
+                  onClick={() => deleteQuiz(rowIndex)}
+                />
+              )}
+            />
           </DataTable>
         </div>
 

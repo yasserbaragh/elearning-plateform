@@ -13,3 +13,14 @@
   height: 10px;
   border-radius: 5px;
 }
+
+.profil{
+  position:relative;
+  left : 170px;
+  height:100px;
+  width:100px;
+}
+
+.hh{
+  color:blueviolet;
+}

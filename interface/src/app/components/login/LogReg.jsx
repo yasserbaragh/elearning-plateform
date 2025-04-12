@@ -17,13 +17,13 @@ export default function LogReg() {
           className="cursor-pointer"
           onClick={() => setShowFirst(true)}
         >
-          Show First
+          login
         </button>
         <button
           className="cursor-pointer"
           onClick={() => setShowFirst(false)}
         >
-          Show Second
+          register
         </button>
       </div>
       <div className="relative">

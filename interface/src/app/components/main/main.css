@@ -1,122 +1,205 @@
-.dashboard {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    width: 20vw;
-    transition: width .5s ease;
-}
-
-.dashboard.active {
-    width: 5vw;
-    transition: width .5s ease;
-}
-
-.content {
+/* main.css */
+/* App container - this should wrap both dashboard and content */
+.app-container {
+    display: flex;
+    min-height: 100vh;
     width: 100%;
-}
-
-.dashboard nav ul {
+  }
+  
+  .dashboard {
+    width: 240px;
+    height: 100vh;
+    background-color: #1a1a1a;
+    transition: all 0.3s ease;
+    z-index: 10;
+    overflow-y: auto;
+    flex-shrink: 0; /* Prevent dashboard from shrinking */
+    color: #9ca3af;
+    position: sticky;
+    top: 0;
+    left: 0;
+  }
+  
+  .dashboard.active {
+    width: 60px;
+  }
+  
+  .dashboard nav {
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dashboard .nav-item {
+    margin-bottom: 2px;
+  }
+  
+  /* Active menu item styling */
+  .nav-item .active,
+  .nav-link.active {
+    background-color: #2d3748;
+    color: #ecc94b;
+    border-left: 2px solid #ecc94b;
+  }
+  
+  /* Section titles */
+  .section-title {
+    color: #718096;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0 1rem;
+  }
+  
+  /* Fix for FontAwesome icons alignment */
+  .fa-fw {
+    width: 1.25em;
+    text-align: center;
+  }
+  
+  /* Content area - main flex item that takes remaining space */
+  .content-area {
+    flex: 1;
+    background: linear-gradient(to bottom right, #000000, #4a1d96);
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .hamburger {
+    display: block;
+    padding: 1rem;
+    color: #9ca3af;
+    border-bottom: 1px solid #2d3748;
+    cursor: pointer;
+  }
+  
+  .hamburger:hover {
+    color: #f3f4f6;
+  }
+  
+  /* Navigation items */
+  .dashboard ul {
     list-style: none;
     padding: 0;
-}
-
-.dashboard nav ul li {
-    margin: 10px 0;
-}
-
-.dashboard nav ul li button {
-    background-color: #f0f0f0;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.dashboard nav ul li button span {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.dashboard nav ul li button.active {
-    background-color: #007bff;
-    color: white;
-}
-
-.dashboard nav ul li button:hover {
-    background-color: #e0e0e0;
-}
-
-.dashboard nav .section-title {
-    font-size: 14px;
-    font-weight: bold;
-    margin: 15px 0 5px;
-    color: #555;
-    text-transform: uppercase;
-}
-
-.dashboard nav ul li span {
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.dashboard nav ul li span.active {
-    color: pink;
-    font-weight: bold;
-}
-
-.dashboard nav ul li span:hover {
-    color: #ff69b4; /* Slightly darker pink for hover effect */
-}
-
-.hamburger span {
-    display: inline-block;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border-radius: 50%;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
-}
-
-.hamburger span:hover {
-    background-color: #e0e0e0;
-}
-
-.escape-room-grid {
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .dashboard li {
+    margin-bottom: 2px;
+  }
+  
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    color: #9ca3af;
+    transition: all 0.2s ease;
+  }
+  
+  .nav-link:hover {
+    background-color: #2d3748;
+    color: #f3f4f6;
+  }
+  
+  /* When dashboard is collapsed */
+  .dashboard.active .section-title {
+    text-align: center;
+  }
+  
+  .dashboard.active .nav-link {
+    justify-content: center;
+  }
+  
+  /* Add border between sections */
+  .dashboard > nav > div {
+    padding: 0.75rem 0;
+  }
+  
+  .dashboard > nav > div:not(:first-child) {
+    border-top: 1px solid #2d3748;
+  }
+  
+  /* Existing escape room styles */
+  .escape-room-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
-}
-
-.escape-room-card {
+  }
+  
+  .escape-room-card {
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.escape-room-card:hover {
+  }
+  
+  .escape-room-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.navbar {
+  }
+  
+  .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
     background-color: #f0f0f0;
-}
-
-.navbar input[type="text"] {
+    width: 100%;
+  }
+  
+  .navbar input[type="text"] {
     flex: 1;
     margin: 0 10px;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
+  }
+  
+  .searchDiv {
+    width: 50%;
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .navClass{
+    border-radius: 15px;
+    margin:3px;
+    background-color: white;
+    padding:5px;
+    border:#4a1d96 2px solid;
+
+  }
+
+  .navUser{
+color:#ccc;
 }
 
-.searchDiv {
-    width: 50%;
-}
+
+  .profile{
+    height:50px;
+    width:50px;
+    margin:2px;
+  }
+
+  .navBar{
+    background-color: #321465;
+  }
+
+  .navProfile{
+    background-color: #683fb0;
+    padding:4px;
+    border-radius: 5px;
+
+  }
+
+  .lvlxp{
+    color:white !important;
+  }
+
+    
+  

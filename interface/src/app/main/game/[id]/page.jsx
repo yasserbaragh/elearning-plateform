@@ -1,12 +1,13 @@
 import React from 'react'
 import Escape from "@/app/components/Escape"
-import { api } from '@/config'
+import { api, fetchNoCache } from '@/config'
 
 export default async function page({ params }) {
-  const game = await fetch(`${api}/api/quizz/${params.id}`)
+  const id = params.id
+  const game = await fetchNoCache(`/quizzes/${id}`)
   return (
     <div>
-      <Escape game={quizz}/>
+      <Escape game={game || ""}/>
     </div>
   )
 }
