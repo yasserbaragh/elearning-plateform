@@ -25,6 +25,10 @@ public class MyUserDetailsService implements UserDetailsService {
                 .roles("USER")
                 .build();
     }
+    public utilisateur loadUserByUsername1(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé : " + username));
+    }
 
 
 }
