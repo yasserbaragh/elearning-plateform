@@ -1,11 +1,42 @@
+"use client"
 import React, { useState } from 'react'
+import { api } from '@/config';
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLogin = () => {
-    console.log('Logging in with:', { email, password })
+  const handleLogin = async () => {
+    try {
+      const response = await fetch(`${api}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, motDePasse: password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      const { token, user } = data;
+
+      // Store token in cookies
+      document.cookie = `token=${token}; path=/; HttpOnly`;
+
+      // Remove password from user object
+      const { password, ...userWithoutPassword } = user;
+
+      // Store user in cookies
+      document.cookie = `user=${encodeURIComponent(JSON.stringify(userWithoutPassword))}; path=/; HttpOnly`;
+
+      console.log('User logged in:', userWithoutPassword);
+
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
   };
 
   return (

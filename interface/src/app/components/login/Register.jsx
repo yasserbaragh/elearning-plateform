@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
+import { api } from '@/config';
 
 export default function Register() {
   const [firstName, setFirstName] = useState('')
@@ -6,16 +8,47 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
+  const router = useRouter();
 
-  const handleRegister = () => {
-    console.log('Registering with:', {
-      firstName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-    })
-  }
+  const handleRegister = async () => {
+    try {
+      const response = await fetch(`${api}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+          phoneNumber,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Registration failed');
+      }
+
+      const data = await response.json();
+      const { token, user } = data;
+
+      // Store token in cookies
+      document.cookie = `token=${token}; path=/; HttpOnly`;
+
+      // Remove password from user object
+      const { password, ...userWithoutPassword } = user;
+
+      // Store user in cookies
+      document.cookie = `user=${encodeURIComponent(JSON.stringify(userWithoutPassword))}; path=/; HttpOnly`;
+
+      console.log('Registration successful');
+      router.push('/login'); // Redirect to login page
+
+    } catch (error) {
+      console.error('Error during registration:', error);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100">
